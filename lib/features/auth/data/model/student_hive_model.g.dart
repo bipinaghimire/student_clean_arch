@@ -18,13 +18,13 @@ class StudentHiveModelAdapter extends TypeAdapter<StudentHiveModel> {
     };
     return StudentHiveModel(
       id: fields[0] as String?,
-      fname: fields[1] as String?,
-      lname: fields[2] as String?,
-      batch: fields[3] as BatchHiveModel?,
-      course: (fields[4] as List?)?.cast<CourseHiveModel>(),
-      phone: fields[5] as String?,
-      username: fields[6] as String?,
-      password: fields[7] as String?,
+      fname: fields[1] as String,
+      lname: fields[2] as String,
+      batch: fields[3] as BatchHiveModel,
+      courses: (fields[4] as List).cast<CourseHiveModel>(),
+      phone: fields[5] as String,
+      username: fields[6] as String,
+      password: fields[7] as String,
     );
   }
 
@@ -41,7 +41,7 @@ class StudentHiveModelAdapter extends TypeAdapter<StudentHiveModel> {
       ..writeByte(3)
       ..write(obj.batch)
       ..writeByte(4)
-      ..write(obj.course)
+      ..write(obj.courses)
       ..writeByte(5)
       ..write(obj.phone)
       ..writeByte(6)

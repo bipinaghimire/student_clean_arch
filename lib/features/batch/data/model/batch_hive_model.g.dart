@@ -18,7 +18,7 @@ class BatchHiveModelAdapter extends TypeAdapter<BatchHiveModel> {
     };
     return BatchHiveModel(
       batchId: fields[0] as String?,
-      batchName: fields[1] as String?,
+      batchName: fields[1] as String,
     );
   }
 
