@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:student_clean_arch/features/data/model/batch.dart';
-import 'package:student_clean_arch/features/data/model/course.dart';
-import 'package:student_clean_arch/features/ui/widgets/multiselect.dart';
+import 'package:student_clean_arch/features/course/data/model/course_hive_model.dart';
+import 'package:student_clean_arch/features/course/presentation/widget/multiselect.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -42,7 +41,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         setState(() {
           selectedCourses = updatedCourses;
         });
-      },
+      } as Function(List p1),
     );
   }
 

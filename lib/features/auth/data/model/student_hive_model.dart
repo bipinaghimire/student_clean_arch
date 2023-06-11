@@ -1,10 +1,14 @@
 import 'package:hive/hive.dart';
-import 'package:student_clean_arch/features/data/model/batch.dart';
-import 'package:student_clean_arch/features/data/model/course.dart';
+import 'package:student_clean_arch/config/constants/hive_table_constant.dart';
+import 'package:student_clean_arch/features/batch/data/model/batch_hive_model.dart';
+import 'package:student_clean_arch/features/course/data/model/course_hive_model.dart';
 import 'package:uuid/uuid.dart';
 
-@HiveType(typeId: 1)
-class Student extends HiveObject {
+// dart run build_runner build --delete-conflicting-outputs
+part 'student_hive_model.g.dart';
+
+@HiveType(typeId: HiveTableConstant.studentTableId)
+class StudentHiveModel {
   // HiveObject is a mixin that provides the ability to use Hive objects as keys
   // Which helps in serialization and deserialization
   @HiveField(0)
@@ -17,10 +21,10 @@ class Student extends HiveObject {
   final String? lname;
 
   @HiveField(3)
-  final BatchEntity? batch;
+  final BatchHiveModel? batch;
 
   @HiveField(4)
-  final List<CourseEntity> course;
+  final List<CourseHiveModel>? course;
 
   @HiveField(5)
   final String? phone;
@@ -31,7 +35,20 @@ class Student extends HiveObject {
   @HiveField(7)
   final String? password;
 
-  Student({
+  //empty constructor
+  StudentHiveModel.empty()
+      : this(
+          id: "",
+          fname: "",
+          lname: "",
+          batch: BatchHiveModel.empty(),
+          course: [],
+          phone: "",
+          username: "",
+          password: "",
+        );
+
+  StudentHiveModel({
     String? id,
     this.fname,
     this.lname,
