@@ -1,10 +1,15 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 import 'package:student_clean_arch/config/constants/hive_table_constant.dart';
-import 'package:student_clean_arch/features/home/domain/entity/course_entity.dart';
+import 'package:student_clean_arch/features/course/domain/entity/course_entity.dart';
 import 'package:uuid/uuid.dart';
 
 // dart run build_runner build --delete-conflicting-outputs
 part 'course_hive_model.g.dart';
+
+final courseHiveModelProvider = Provider(
+  (ref) => CourseHiveModel.empty(),
+);
 
 @HiveType(typeId: HiveTableConstant.courseTableId)
 class CourseHiveModel {

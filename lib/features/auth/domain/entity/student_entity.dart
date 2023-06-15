@@ -1,5 +1,5 @@
 import 'package:student_clean_arch/features/batch/domain/entity/batch_entity.dart';
-import 'package:student_clean_arch/features/home/domain/entity/course_entity.dart';
+import 'package:student_clean_arch/features/course/domain/entity/course_entity.dart';
 
 class StudentEntity {
   final String? id;

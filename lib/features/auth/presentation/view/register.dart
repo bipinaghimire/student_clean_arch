@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:student_clean_arch/features/course/data/model/course_hive_model.dart';
-import 'package:student_clean_arch/features/course/presentation/widget/multiselect.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:student_clean_arch/features/batch/domain/entity/batch_entity.dart';
+import 'package:student_clean_arch/features/batch/presentation/viewmodel/batch_view_model.dart';
 
-class RegisterScreen extends StatefulWidget {
+class RegisterScreen extends ConsumerStatefulWidget {
   const RegisterScreen({super.key});
 
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _RegisterScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   final firstNameController = TextEditingController();
   final lastNameController = TextEditingController();
   final phonenoController = TextEditingController();
@@ -20,33 +21,37 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final passwordController = TextEditingController();
   final fkey = GlobalKey<FormState>();
 
-  List<BatchEntity> batchList = [
-    BatchEntity(batchId: "1", batchName: '30A'),
-    BatchEntity(batchId: "2", batchName: '30B'),
-  ];
-  List<CourseEntity> selectedCourses = [];
-  List<CourseEntity> availableCourses = [
-    CourseEntity(courseId: "1", courseName: 'React'),
-    CourseEntity(courseId: "2", courseName: 'Flutter'),
-    CourseEntity(courseId: "3", courseName: 'Node'),
-    CourseEntity(courseId: "4", courseName: 'Python'),
-  ];
+  // List<BatchEntity> batchList = [
+  //   BatchEntity(batchId: "1", batchName: '30A'),
+  //   BatchEntity(batchId: "2", batchName: '30B'),
+  // ];
+  // List<CourseEntity> selectedCourses = [];
+  // List<CourseEntity> availableCourses = [
+  //   CourseEntity(courseId: "1", courseName: 'React'),
+  //   CourseEntity(courseId: "2", courseName: 'Flutter'),
+  //   CourseEntity(courseId: "3", courseName: 'Node'),
+  //   CourseEntity(courseId: "4", courseName: 'Python'),
+  // ];
 
-  void showMultiSelect() {
-    MultiSelectDialog.showMultiSelect(
-      context,
-      availableCourses,
-      selectedCourses,
-      (List<CourseEntity> updatedCourses) {
-        setState(() {
-          selectedCourses = updatedCourses;
-        });
-      } as Function(List p1),
-    );
-  }
+  // void showMultiSelect() {
+  //   MultiSelectDialog.showMultiSelect(
+  //     context,
+  //     availableCourses,
+  //     selectedCourses,
+  //     (List<CourseEntity> updatedCourses) {
+  //       setState(() {
+  //         selectedCourses = updatedCourses;
+  //       });
+  //     } as Function(List p1),
+  //   );
+  // }
+
+  BatchEntity? _dropDownValue;
 
   @override
   Widget build(BuildContext context) {
+    final batchState = ref.watch(batchViewModelProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Register Screen"),
@@ -105,35 +110,61 @@ class _RegisterScreenState extends State<RegisterScreen> {
               const SizedBox(
                 height: 10,
               ),
-              DropdownButtonFormField<String?>(
-                validator: (value) {
-                  if (value == null) {
-                    return 'Please select a batch';
-                  }
-                  return null;
-                },
-                decoration: const InputDecoration(
-                  labelText: 'Batch',
-                  border: OutlineInputBorder(),
-                ),
-                value: batch,
-                items: batchList.map((BatchEntity batch) {
-                  return DropdownMenuItem<String?>(
-                    value: batch.batchName,
-                    child: Text(batch.batchName),
-                  );
-                }).toList(),
-                onChanged: (String? value) {
-                  setState(() {
-                    batch = value;
-                  });
-                },
-              ),
-              const SizedBox(
-                height: 10,
-              ),
+              if (batchState.isLoading) ...{
+                const Center(
+                  child: CircularProgressIndicator(),
+                )
+              } else if (batchState.error != null) ...{
+                Center(
+                  child: Text(batchState.error!),
+                )
+              } else ...{
+                DropdownButtonFormField(
+                  items: batchState.batches
+                      .map((e) => DropdownMenuItem(
+                            value: e,
+                            child: Text(e.batchName),
+                          ))
+                      .toList(),
+                  onChanged: (value) {
+                    _dropDownValue = value;
+                  },
+                  value: _dropDownValue,
+                  decoration: const InputDecoration(
+                    labelText: 'Select Batch',
+                  ),
+                )
+              },
+              // DropdownButtonFormField<String?>(
+              //   validator: (value) {
+              //     if (value == null) {
+              //       return 'Please select a batch';
+              //     }
+              //     return null;
+              //   },
+              //   decoration: const InputDecoration(
+              //     labelText: 'Batch',
+              //     border: OutlineInputBorder(),
+              //   ),
+              //   value: batch,
+              //   items: batchList.map((BatchEntity batch) {
+              //     return DropdownMenuItem<String?>(
+              //       value: batch.batchName,
+              //       child: Text(batch.batchName),
+              //     );
+              //   }).toList(),
+              //   onChanged: (String? value) {
+              //     setState(() {
+              //       batch = value;
+              //     });
+              //   },
+              // ),
+              // const SizedBox(
+              //   height: 10,
+              // ),
               GestureDetector(
-                onTap: showMultiSelect,
+                // onTap: showMultiSelect,
+
                 child: Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
@@ -155,9 +186,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
               ),
               const SizedBox(height: 10),
-              Text(
-                'Selected Courses: ${selectedCourses.map((course) => course.courseName)}',
-                style: const TextStyle(fontSize: 16),
+              const Text(
+                'Selected Courses: ',
+                style: TextStyle(fontSize: 16),
               ),
               const SizedBox(
                 height: 10,
