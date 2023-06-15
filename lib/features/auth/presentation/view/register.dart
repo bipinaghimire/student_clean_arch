@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
+import 'package:student_clean_arch/features/auth/domain/entity/student_entity.dart';
+import 'package:student_clean_arch/features/auth/presentation/viewmodel/auth_view_model.dart';
 import 'package:student_clean_arch/features/batch/domain/entity/batch_entity.dart';
 import 'package:student_clean_arch/features/batch/presentation/viewmodel/batch_view_model.dart';
+import 'package:student_clean_arch/features/course/domain/entity/course_entity.dart';
+import 'package:student_clean_arch/features/course/presentation/viewmodel/course_view_model.dart';
 
 class RegisterScreen extends ConsumerStatefulWidget {
   const RegisterScreen({super.key});
@@ -47,11 +52,13 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   // }
 
   BatchEntity? _dropDownValue;
+  final List<CourseEntity> _selectedCourses = [];
 
   @override
   Widget build(BuildContext context) {
     final batchState = ref.watch(batchViewModelProvider);
-
+    final courseState = ref.watch(courseViewModelProvider);
+    final authState = ref.watch(authViewModelProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Register Screen"),
@@ -133,67 +140,57 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   decoration: const InputDecoration(
                     labelText: 'Select Batch',
                   ),
+                  validator: ((value) {
+                    if (value == null) {
+                      return 'Please select batch';
+                    }
+                    return null;
+                  }),
                 )
               },
-              // DropdownButtonFormField<String?>(
-              //   validator: (value) {
-              //     if (value == null) {
-              //       return 'Please select a batch';
-              //     }
-              //     return null;
-              //   },
-              //   decoration: const InputDecoration(
-              //     labelText: 'Batch',
-              //     border: OutlineInputBorder(),
-              //   ),
-              //   value: batch,
-              //   items: batchList.map((BatchEntity batch) {
-              //     return DropdownMenuItem<String?>(
-              //       value: batch.batchName,
-              //       child: Text(batch.batchName),
-              //     );
-              //   }).toList(),
-              //   onChanged: (String? value) {
-              //     setState(() {
-              //       batch = value;
-              //     });
-              //   },
-              // ),
-              // const SizedBox(
-              //   height: 10,
-              // ),
-              GestureDetector(
-                // onTap: showMultiSelect,
-
-                child: Container(
-                  padding: const EdgeInsets.all(12),
+              if (courseState.isLoading) ...{
+                const Center(
+                  child: CircularProgressIndicator(),
+                )
+              } else if (courseState.error != null) ...{
+                Center(
+                  child: Text(courseState.error!),
+                )
+              } else ...{
+                MultiSelectDialogField(
+                  title: const Text('Select course'),
+                  items: courseState.courses
+                      .map((course) => MultiSelectItem(
+                            course,
+                            course.courseName,
+                          ))
+                      .toList(),
+                  listType: MultiSelectListType.CHIP,
+                  buttonText: const Text('Select course'),
+                  buttonIcon: const Icon(Icons.search),
+                  onConfirm: (values) {
+                    _selectedCourses.clear();
+                    _selectedCourses.addAll(values);
+                  },
                   decoration: BoxDecoration(
                     border: Border.all(
                       color: Colors.grey,
-                      width: 1.0,
                     ),
+                    borderRadius: BorderRadius.circular(5),
                   ),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Select Course',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                      Icon(Icons.search),
-                    ],
-                  ),
+                  validator: ((value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please select courses';
+                    }
+                    return null;
+                  }),
                 ),
-              ),
-              const SizedBox(height: 10),
-              const Text(
-                'Selected Courses: ',
-                style: TextStyle(fontSize: 16),
-              ),
+              },
               const SizedBox(
                 height: 10,
               ),
               TextFormField(
+                controller: usernameController,
                 decoration: const InputDecoration(
                   labelText: "Username",
                 ),
@@ -202,6 +199,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 height: 10,
               ),
               TextFormField(
+                controller: passwordController,
                 decoration: const InputDecoration(
                   labelText: "Password",
                 ),
@@ -211,12 +209,35 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/register');
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Student added"),
-                    ),
-                  );
+                  if (fkey.currentState!.validate()) {
+                    var student = StudentEntity(
+                      fname: firstNameController.text,
+                      lname: lastNameController.text,
+                      phone: phonenoController.text,
+                      username: usernameController.text,
+                      password: passwordController.text,
+                      batch: _dropDownValue,
+                      courses: _selectedCourses,
+                    );
+
+                    ref
+                        .read(authViewModelProvider.notifier)
+                        .registerStudent(student);
+
+                    if (authState.error != null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(authState.error!),
+                        ),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("Successfully registered"),
+                        ),
+                      );
+                    }
+                  }
                 },
                 child: const Text("Register"),
               ),

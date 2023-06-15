@@ -1,3 +1,4 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 import 'package:student_clean_arch/config/constants/hive_table_constant.dart';
 import 'package:student_clean_arch/features/auth/domain/entity/student_entity.dart';
@@ -7,6 +8,10 @@ import 'package:uuid/uuid.dart';
 
 // dart run build_runner build --delete-conflicting-outputs
 part 'student_hive_model.g.dart';
+
+final authHiveModelProvider = Provider(
+  (ref) => StudentHiveModel.empty(),
+);
 
 @HiveType(typeId: HiveTableConstant.studentTableId)
 class StudentHiveModel {

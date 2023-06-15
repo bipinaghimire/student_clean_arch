@@ -49,7 +49,7 @@ class HiveService {
     return courses;
   }
 
-  //====================student queries==========================
+  // ======================== Student Queries ========================
   Future<void> addStudent(StudentHiveModel student) async {
     var box =
         await Hive.openBox<StudentHiveModel>(HiveTableConstant.studentBox);
@@ -60,7 +60,18 @@ class HiveService {
     var box =
         await Hive.openBox<StudentHiveModel>(HiveTableConstant.studentBox);
     var students = box.values.toList();
+    box.close();
     return students;
+  }
+
+  //Login
+  Future<StudentHiveModel?> login(String username, String password) async {
+    var box =
+        await Hive.openBox<StudentHiveModel>(HiveTableConstant.studentBox);
+    var student = box.values.firstWhere((element) =>
+        element.username == username && element.password == password);
+    box.close();
+    return student;
   }
 
   //============================ Insert dummy data============================

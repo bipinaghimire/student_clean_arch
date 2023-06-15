@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:student_clean_arch/features/auth/presentation/view/login.dart';
 import 'package:student_clean_arch/features/auth/presentation/view/register.dart';
+import 'package:student_clean_arch/features/home/presentation/view/home.dart';
 import 'package:student_clean_arch/features/splash/presentation/view/splash_screen.dart';
 
 class MyApp extends StatefulWidget {
@@ -19,7 +20,8 @@ class _MyAppState extends State<MyApp> {
       routes: {
         '/': (context) => const SplashScreen(),
         '/login': (context) => const LoginScreen(),
-        '/register': (context) => const RegisterScreen()
+        '/register': (context) => const RegisterScreen(),
+        '/home': (context) => const HomeScreen(),
       },
     );
   }
