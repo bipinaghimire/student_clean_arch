@@ -34,7 +34,7 @@ packages:
     source: hosted
     version: "2.11.0"
   awesome_dio_interceptor:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: awesome_dio_interceptor
       sha256: b65ba5c76f481551683bf0388e8b0a9f87df32f2bcb3f529820729b4fcaa0915
