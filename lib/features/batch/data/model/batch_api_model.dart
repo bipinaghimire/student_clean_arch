@@ -12,7 +12,7 @@ final batchApiModelProvider = Provider<BatchApiModel>(
 
 @JsonSerializable()
 class BatchApiModel extends Equatable {
-  @JsonKey(name: 'id')
+  @JsonKey(name: '_id')
   final String? batchId;
   final String batchName;
 

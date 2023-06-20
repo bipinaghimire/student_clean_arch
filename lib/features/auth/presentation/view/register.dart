@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:student_clean_arch/features/auth/domain/entity/student_entity.dart';
 import 'package:student_clean_arch/features/auth/presentation/viewmodel/auth_view_model.dart';
 import 'package:student_clean_arch/features/batch/domain/entity/batch_entity.dart';
 import 'package:student_clean_arch/features/batch/presentation/viewmodel/batch_view_model.dart';
@@ -30,31 +29,6 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   final passwordController = TextEditingController();
   final fkey = GlobalKey<FormState>();
 
-  // List<BatchEntity> batchList = [
-  //   BatchEntity(batchId: "1", batchName: '30A'),
-  //   BatchEntity(batchId: "2", batchName: '30B'),
-  // ];
-  // List<CourseEntity> selectedCourses = [];
-  // List<CourseEntity> availableCourses = [
-  //   CourseEntity(courseId: "1", courseName: 'React'),
-  //   CourseEntity(courseId: "2", courseName: 'Flutter'),
-  //   CourseEntity(courseId: "3", courseName: 'Node'),
-  //   CourseEntity(courseId: "4", courseName: 'Python'),
-  // ];
-
-  // void showMultiSelect() {
-  //   MultiSelectDialog.showMultiSelect(
-  //     context,
-  //     availableCourses,
-  //     selectedCourses,
-  //     (List<CourseEntity> updatedCourses) {
-  //       setState(() {
-  //         selectedCourses = updatedCourses;
-  //       });
-  //     } as Function(List p1),
-  //   );
-  // }
-
   BatchEntity? _dropDownValue;
   final List<CourseEntity> _selectedCourses = [];
 
@@ -73,8 +47,9 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       if (image != null) {
         setState(() {
           _img = File(image.path);
-          ref.read(authViewModelProvider.notifier).uploadProfilePicture(_img!);
         });
+        final authState = ref.read(authViewModelProvider.notifier);
+        authState.uploadProfilePicture(_img!);
       } else {
         return;
       }
@@ -282,40 +257,57 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
               const SizedBox(
                 height: 10,
               ),
+              // ElevatedButton(
+              //   onPressed: () {
+              //     if (fkey.currentState!.validate()) {
+              //       var student = StudentEntity(
+              //         fname: firstNameController.text,
+              //         lname: lastNameController.text,
+              //         phone: phonenoController.text,
+              //         image: authState.imageName,
+              //         username: usernameController.text,
+              //         password: passwordController.text,
+              //         batch: _dropDownValue,
+              //         courses: _selectedCourses,
+              //       );
+
+              //       if (authState.error != null) {
+              //         ScaffoldMessenger.of(context).showSnackBar(
+              //           SnackBar(
+              //             content: Text(authState.error!),
+              //           ),
+              //         );
+              //       } else {
+              //         ScaffoldMessenger.of(context).showSnackBar(
+              //           const SnackBar(
+              //             content: Text("Successfully registered"),
+              //           ),
+              //         );
+              //       }
+              //     }
+              //   },
+              //   child: const Text("Register"),
+              // ),
+
               ElevatedButton(
                 onPressed: () {
                   if (fkey.currentState!.validate()) {
-                    var student = StudentEntity(
-                      fname: firstNameController.text,
-                      lname: lastNameController.text,
-                      phone: phonenoController.text,
-                      username: usernameController.text,
-                      password: passwordController.text,
-                      batch: _dropDownValue,
-                      courses: _selectedCourses,
-                    );
-
-                    ref
-                        .read(authViewModelProvider.notifier)
-                        .registerStudent(student);
-
-                    if (authState.error != null) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(authState.error!),
-                        ),
-                      );
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Successfully registered"),
-                        ),
-                      );
-                    }
+                    final authStateNotifer =
+                        ref.read(authViewModelProvider.notifier);
+                    authStateNotifer.registerStudent(
+                        fname: firstNameController.text,
+                        lname: lastNameController.text,
+                        password: passwordController.text,
+                        image: authState.imageName ?? "",
+                        username: usernameController.text,
+                        phone: phonenoController.text,
+                        batch: _dropDownValue!.batchId!,
+                        courses:
+                            _selectedCourses.map((e) => e.courseId!).toList());
                   }
                 },
-                child: const Text("Register"),
-              ),
+                child: const Text('Register'),
+              )
             ],
           ),
         ),

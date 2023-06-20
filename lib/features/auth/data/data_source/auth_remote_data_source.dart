@@ -6,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:student_clean_arch/config/constants/api_endpoint.dart';
 import 'package:student_clean_arch/core/failure/failure.dart';
 import 'package:student_clean_arch/core/network/remote/http_service.dart';
-import 'package:student_clean_arch/features/auth/domain/entity/student_entity.dart';
 
 final authRemoteDataSourceProvider = Provider(
   (ref) => AuthRemoteDataSource(dio: ref.read(httpServiceProvider)),
@@ -17,19 +16,28 @@ class AuthRemoteDataSource {
 
   AuthRemoteDataSource({required this.dio});
 
-  Future<Either<Failure, bool>> registerStudent(StudentEntity student) async {
+  Future<Either<Failure, bool>> registerStudent({
+    required String fname,
+    required String lname,
+    required String password,
+    String? image,
+    required String username,
+    required String phone,
+    required String batch,
+    required List<String> courses,
+  }) async {
     try {
       Response response = await dio.post(
         ApiEndpoints.register,
         data: {
-          "fname": student.fname,
-          "lname": student.lname,
-          "image": student.image,
-          "username": student.username,
-          "password": student.password,
-          "batch": student.batch!.batchId,
-          // "course": ["6489a5908dbc6d39719ec19c", "6489a5968dbc6d39719ec19e"]
-          "course": student.courses.map((e) => e.courseId).toList(),
+          'fname': fname,
+          'lname': lname,
+          'password': password,
+          'image': image ?? '',
+          'username': username,
+          'phone': phone,
+          'batch': batch,
+          'courses': courses,
         },
       );
       if (response.statusCode == 200) {

@@ -21,7 +21,10 @@ class CourseViewModel extends StateNotifier<CourseState> {
 
     data.fold(
       (l) => state.copyWith(isLoading: false, error: l.error),
-      (r) => state = state.copyWith(isLoading: false, error: null),
+      (r) => state = state.copyWith(
+        isLoading: false,
+        error: null,
+      ),
     );
   }
 

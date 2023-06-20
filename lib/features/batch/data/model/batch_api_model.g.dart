@@ -8,12 +8,12 @@ part of 'batch_api_model.dart';
 
 BatchApiModel _$BatchApiModelFromJson(Map<String, dynamic> json) =>
     BatchApiModel(
-      batchId: json['id'] as String?,
+      batchId: json['_id'] as String?,
       batchName: json['batchName'] as String,
     );
 
 Map<String, dynamic> _$BatchApiModelToJson(BatchApiModel instance) =>
     <String, dynamic>{
-      'id': instance.batchId,
+      '_id': instance.batchId,
       'batchName': instance.batchName,
     };

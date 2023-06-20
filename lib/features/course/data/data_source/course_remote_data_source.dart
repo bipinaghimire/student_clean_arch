@@ -50,6 +50,8 @@ class CourseRemoteDataSource {
       if (response.statusCode == 200) {
         // OR
         // 2nd way
+        print(response.data);
+
         GetAllCourseDTO courseAddDTO = GetAllCourseDTO.fromJson(response.data);
         return Right(courseApiModel.toEntityList(courseAddDTO.data));
       } else {

@@ -8,12 +8,12 @@ part of 'course_api_model.dart';
 
 CourseApiModel _$CourseApiModelFromJson(Map<String, dynamic> json) =>
     CourseApiModel(
-      courseId: json['id'] as String?,
+      courseId: json['_id'] as String?,
       courseName: json['courseName'] as String,
     );
 
 Map<String, dynamic> _$CourseApiModelToJson(CourseApiModel instance) =>
     <String, dynamic>{
-      'id': instance.courseId,
+      '_id': instance.courseId,
       'courseName': instance.courseName,
     };

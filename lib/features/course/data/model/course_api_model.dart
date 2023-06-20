@@ -12,7 +12,7 @@ final courseApiModelProvider = Provider<CourseApiModel>(
 
 @JsonSerializable()
 class CourseApiModel extends Equatable {
-  @JsonKey(name: 'id')
+  @JsonKey(name: '_id')
   final String? courseId;
   final String courseName;
 

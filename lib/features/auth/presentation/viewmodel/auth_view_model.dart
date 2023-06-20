@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:student_clean_arch/features/auth/domain/entity/student_entity.dart';
 import 'package:student_clean_arch/features/auth/domain/use_case/auth_usecase.dart';
 import 'package:student_clean_arch/features/auth/presentation/state/auth_state.dart';
 
@@ -17,9 +16,27 @@ class AuthViewModel extends StateNotifier<AuthState> {
 
   AuthViewModel(this._authUseCase) : super(AuthState(isLoading: false));
 
-  Future<void> registerStudent(StudentEntity student) async {
+  Future<void> registerStudent({
+    required String fname,
+    required String lname,
+    String? image,
+    required String batch,
+    required List<String> courses,
+    required String phone,
+    required String username,
+    required String password,
+  }) async {
     state = state.copyWith(isLoading: true);
-    var data = await _authUseCase.registerStudent(student);
+    var data = await _authUseCase.registerStudent(
+      fname: fname,
+      lname: lname,
+      image: image,
+      batch: batch,
+      courses: courses,
+      phone: phone,
+      username: username,
+      password: password,
+    );
     data.fold(
       (failure) => state = state.copyWith(
         isLoading: false,
