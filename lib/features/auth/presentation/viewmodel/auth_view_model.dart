@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:student_clean_arch/features/auth/domain/entity/student_entity.dart';
 import 'package:student_clean_arch/features/auth/domain/use_case/auth_usecase.dart';
@@ -44,5 +46,17 @@ class AuthViewModel extends StateNotifier<AuthState> {
     );
 
     return isLogin;
+  }
+
+  Future<void> uploadProfilePicture(File? file) async {
+    state = state.copyWith(isLoading: true);
+    var data = await _authUseCase.uploadProfilePicture(file!);
+    data.fold(
+      (l) => state = state.copyWith(isLoading: false, error: l.error),
+      (imageName) {
+        state =
+            state.copyWith(isLoading: false, error: null, imageName: imageName);
+      },
+    );
   }
 }
