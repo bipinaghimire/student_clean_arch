@@ -26,8 +26,7 @@ class AuthRemoteRepoImpl implements IAuthRepository {
 
   @override
   Future<Either<Failure, bool>> registerStudent(StudentEntity student) {
-    // TODO: implement registerStudent
-    throw UnimplementedError();
+    return authRemoteDataSource.registerStudent(student);
   }
 
   @override
