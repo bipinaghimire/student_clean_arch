@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:student_clean_arch/features/auth/presentation/view/login.dart';
 import 'package:student_clean_arch/features/auth/presentation/view/register.dart';
+import 'package:student_clean_arch/features/home/presentation/view/add_batch.dart';
+import 'package:student_clean_arch/features/home/presentation/view/add_course.dart';
 import 'package:student_clean_arch/features/home/presentation/view/home.dart';
 import 'package:student_clean_arch/features/splash/presentation/view/splash_screen.dart';
 
@@ -22,6 +24,8 @@ class _MyAppState extends State<MyApp> {
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),
         '/home': (context) => const HomeScreen(),
+        '/addbatch': (context) => const AddBatchScreen(),
+        '/addcourse': (context) => const AddCourseScreen(),
       },
     );
   }

@@ -63,30 +63,29 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               ElevatedButton(
                 onPressed: () async {
                   if (fkey.currentState!.validate()) {
-                    bool isLogin = await ref
-                        .read(authViewModelProvider.notifier)
-                        .loginStudent(
+                    await ref.read(authViewModelProvider.notifier).loginStudent(
+                          context,
                           usernameController.text,
                           passwordController.text,
                         );
-
                     // We don't use Navigator and Snackbar here, but for
                     // time being, we will use it.
-                    if (isLogin) {
-                      Navigator.pushNamed(context, '/home');
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text(
-                            'Login failed',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontFamily: 'Brand Bold',
-                            ),
-                          ),
-                        ),
-                      );
-                    }
+                    // if (isLogin) {
+                    //   print(isLogin);
+                    //   Navigator.pushNamed(context, '/home');
+                    // } else {
+                    //   ScaffoldMessenger.of(context).showSnackBar(
+                    //     const SnackBar(
+                    //       content: Text(
+                    //         'Login failed',
+                    //         style: TextStyle(
+                    //           fontSize: 18,
+                    //           fontFamily: 'Brand Bold',
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   );
+                    // }
                   }
                 },
                 child: const SizedBox(

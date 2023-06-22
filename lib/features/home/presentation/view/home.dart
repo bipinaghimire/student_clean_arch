@@ -15,8 +15,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       appBar: AppBar(
         title: const Text("Home"),
       ),
-      body: const Center(
-        child: Text("Home Screen"),
+      body: Center(
+        child: Column(
+          children: [
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/addbatch');
+                },
+                child: const Text("Add Batch")),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/addcourse');
+                },
+                child: const Text("Add Course")),
+          ],
+        ),
       ),
     );
   }
