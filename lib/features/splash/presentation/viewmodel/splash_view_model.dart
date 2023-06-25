@@ -18,7 +18,7 @@ class SplashViewModel extends StateNotifier<void> {
   init(BuildContext context) async {
     final data = await _userSharedPrefs.getUserToken();
 
-    data.fold((l) => null, (token) {
+    data.fold((l) => Navigator.popAndPushNamed(context, '/login'), (token) {
       if (token != null) {
         bool isTokenExpired = isValidToken(token);
         if (isTokenExpired) {

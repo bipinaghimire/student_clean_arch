@@ -19,7 +19,7 @@ class UserSharedPrefs {
   }
 
   //get user token
-  Future<Either<Failure, String>> getUserToken() async {
+  Future<Either<Failure, String?>> getUserToken() async {
     try {
       _sharedPreferences = await SharedPreferences.getInstance();
       String? token = _sharedPreferences.getString("token");

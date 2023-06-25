@@ -1,1 +1,3 @@
-class AppRoute {}
+class AppRoute {
+  AppRoute._();
+}
