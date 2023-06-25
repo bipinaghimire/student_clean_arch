@@ -15,7 +15,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     Future.delayed(const Duration(seconds: 2), () {
       // Navigator.pushNamed(context, '/login');
       //if there is token go to dashboard and if not then go to login page
-      ref.read(splashViewModelProvider.notifier).isUserLoggedIn(context);
+      ref.read(splashViewModelProvider.notifier).init(context);
     });
     super.initState();
   }
